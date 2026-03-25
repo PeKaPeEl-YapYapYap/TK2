@@ -1,5 +1,7 @@
 # BACA WOY
 JANGAN LUPA SET UP ENV SENDIRI DI PYTHON PLUS DOWNLOAD DEPEDENCIESNYA.  
 CEK LAGI TUTOR PBP
+  
+oke rel y besok aja  
 
-oke rel y besok aja
+Tf 100rb dulu

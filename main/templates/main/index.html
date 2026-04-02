@@ -6,21 +6,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Biodata</title>
     <style>
-      body { font-family: Arial, sans-serif; padding: 24px; background: #f7f7f9; }
-      .container { max-width: 900px; margin: 0 auto; }
-      h1 { text-align: center; color: #333; }
-      .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 20px; }
-      .card { background: #fff; border: 1px solid #e1e1e6; padding: 14px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-      .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
-      .name { font-weight: 700; color: #111; font-size: 1.1em; }
-      .meta { color: #555; font-size: 0.95em; margin-top: 6px; }
-      .small { font-size: 0.85em; color: #777; margin-top: 10px; }
+      body { 
+        font-family: Arial, sans-serif; 
+        padding: 24px; 
+        background: #f7f7f9;
+        margin: 0;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        background: #fff;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .header h1 {
+        margin: 0;
+        color: #333;
+      }
+      .auth-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .user-info img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .user-info span {
+        color: #555;
+        font-size: 0.95em;
+      }
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95em;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+      .btn-login {
+        background: #1f2937;
+        color: white;
+      }
+      .btn-login:hover {
+        background: #374151;
+      }
+      .btn-logout {
+        background: #ef4444;
+        color: white;
+      }
+      .btn-logout:hover {
+        background: #dc2626;
+      }
+      .container { 
+        max-width: 900px; 
+        margin: 0 auto; 
+      }
+      .cards { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+        gap: 16px; 
+        margin-top: 20px; 
+      }
+      .card { 
+        background: #fff; 
+        border: 1px solid #e1e1e6; 
+        padding: 14px; 
+        border-radius: 8px; 
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04); 
+      }
+      .card img { 
+        width: 100%; 
+        height: 200px; 
+        object-fit: cover; 
+        border-radius: 6px; 
+        margin-bottom: 10px; 
+      }
+      .name { 
+        font-weight: 700; 
+        color: #111; 
+        font-size: 1.1em; 
+      }
+      .meta { 
+        color: #555; 
+        font-size: 0.95em; 
+        margin-top: 6px; 
+      }
+      .small { 
+        font-size: 0.85em; 
+        color: #777; 
+        margin-top: 10px; 
+      }
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="header">
       <h1>Daftar Biodata</h1>
+      <div class="auth-section">
+        {% if user.is_authenticated %}
+          <div class="user-info">
+            {% if oauth_profile.google_picture %}
+              <img src="{{ oauth_profile.google_picture }}" alt="{{ user.first_name }}">
+            {% endif %}
+            <div>
+              <div style="font-weight: 600;">{{ user.first_name }} {{ user.last_name }}</div>
+              <div style="font-size: 0.85em; color: #777;">{{ user.email }}</div>
+            </div>
+          </div>
+          <a href="{% url 'logout' %}" class="btn btn-logout">Logout</a>
+        {% else %}
+          <a href="{% url 'login_google' %}" class="btn btn-login">Login with Google</a>
+        {% endif %}
+      </div>
+    </div>
 
+    <div class="container">
       <div class="cards">
         {% for person in biodata_list %}
         <div class="card">

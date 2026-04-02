@@ -6,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 from django.conf import settings
 import os
 from utils import SimpleOAuth2Client
-from main.models import UserProfile
+from main.models import UserProfile, ConfigWeb
 from datetime import datetime, timedelta
 
 # Initialize Google OAuth Client
@@ -61,9 +61,44 @@ def index(request):
 		},
     ]
     
+    # 1. Ambil atau buat objek konfigurasi web
+    config, created = ConfigWeb.objects.get_or_create(id=1)
+    
+    # 2. Definisikan email Google anggota kelompok yang diizinkan (Ganti dengan email asli)
+    allowed_emails = [
+        'peteryap0505@gmail.com',
+        'davin@example.com',
+        'farrellbagoes04@gmail.com',
+        'andrew.wanarahardja@gmail.com',
+        'rousan@example.com'
+    ]
+    
+    is_member = False
+    
+    if request.user.is_authenticated:
+        # Cek apakah email user yang sedang login ada di list anggota kelompok
+        if request.user.email in allowed_emails:
+            is_member = True
+            
+        # 3. Handle perubahan tema jika yang submit form adalah anggota kelompok
+        if request.method == 'POST' and is_member:
+            bg_color = request.POST.get('background_color')
+            font_family = request.POST.get('font_family')
+            
+            if bg_color:
+                config.background_color = bg_color
+            if font_family:
+                config.font_family = font_family
+                
+            config.save()
+            return redirect('home')
+    
+    
     context = {
         "biodata_list": data_biodata,
         "user": request.user if request.user.is_authenticated else None,
+        "config": config,          
+        "is_member": is_member,
     }
     
     if request.user.is_authenticated:

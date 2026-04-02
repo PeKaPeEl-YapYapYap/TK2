@@ -7,9 +7,9 @@
     <title>Biodata</title>
     <style>
       body { 
-        font-family: Arial, sans-serif; 
+        font-family: {{ config.font_family |safe }}; 
+        background: {{ config.background_color }};
         padding: 24px; 
-        background: #f7f7f9;
         margin: 0;
       }
       .header {
@@ -111,7 +111,7 @@
       }
     </style>
   </head>
-  <body>
+  <body id="body">
     <div class="header">
       <h1>Daftar Biodata</h1>
       <div class="auth-section">
@@ -132,6 +132,40 @@
       </div>
     </div>
 
+    {% if user.is_authenticated %}
+      {% if is_member %}
+      <div class="container" style="margin-bottom: 20px;">
+        <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0;">Pengaturan Tema (Khusus Anggota)</h3>
+          
+          <form method="POST" style="display: flex; gap: 15px; align-items: flex-end;">
+            {% csrf_token %}
+            
+            <div>
+              <label for="bg_color" style="display:block; margin-bottom: 5px; font-size: 0.9em;">Warna Background:</label>
+              <input type="color" id="bg_color" name="background_color" value="{{ config.background_color|default:'#f7f7f9' }}" style="height: 35px; width: 50px; cursor: pointer;">
+            </div>
+            
+            <div>
+              <label for="font_family" style="display:block; margin-bottom: 5px; font-size: 0.9em;">Font Family:</label>
+              <select id="font_family" name="font_family" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 250px; cursor: pointer;">
+                <option value="Arial, sans-serif" {% if config.font_family == 'Arial, sans-serif' %}selected{% endif %}>Arial</option>
+                <option value="'Times New Roman', Times, serif" {% if config.font_family == "'Times New Roman', Times, serif" %}selected{% endif %}>Times New Roman</option>
+                <option value="'Courier New', Courier, monospace" {% if config.font_family == "'Courier New', Courier, monospace" %}selected{% endif %}>Courier New</option>
+                <option value="Georgia, serif" {% if config.font_family == 'Georgia, serif' %}selected{% endif %}>Georgia</option>
+                <option value="Verdana, sans-serif" {% if config.font_family == 'Verdana, sans-serif' %}selected{% endif %}>Verdana</option>
+                <option value="'Trebuchet MS', sans-serif" {% if config.font_family == "'Trebuchet MS', sans-serif" %}selected{% endif %}>Trebuchet MS</option>
+                <option value="Tahoma, sans-serif" {% if config.font_family == 'Tahoma, sans-serif' %}selected{% endif %}>Tahoma</option>
+              </select>
+            </div>
+            
+            <button type="submit" class="btn btn-login">Simpan</button>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+    {% endif %}
+
     <div class="container">
       <div class="cards">
         {% for person in biodata_list %}
@@ -146,5 +180,11 @@
         {% endfor %}
       </div>
     </div>
+    <script>
+      function changeColor(color) {
+        document.getElementById("body").style.backgroundColor = color;
+        console.log("Hallo")
+      }
+    </script>
   </body>
 </html>

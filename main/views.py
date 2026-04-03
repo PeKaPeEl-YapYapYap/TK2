@@ -61,17 +61,7 @@ def index(request):
 		},
     ]
     
-    # 1. Ambil atau buat objek konfigurasi web
     config, created = ConfigWeb.objects.get_or_create(id=1)
-    
-    # 2. Definisikan email Google anggota kelompok yang diizinkan (Ganti dengan email asli)
-    # allowed_emails = [
-    #     'peteryap0505@gmail.com',
-    #     'davin@example.com',
-    #     'farrellbagoes04@gmail.com',
-    #     'andrew.wanarahardja@gmail.com',
-    #     'syahrousan@gmail.com.com'
-    # ]
     
     is_member = False
     

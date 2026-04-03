@@ -57,7 +57,7 @@ def index(request):
 			"umur": 69, 
 			"npm": "2406435894",
 			"prodi": "Ilmu Komputer", 
-			"gambar": "/static/image/rousan.jpg"
+			"gambar": "/static/image/rousan.png"
 		},
     ]
     
@@ -65,22 +65,26 @@ def index(request):
     config, created = ConfigWeb.objects.get_or_create(id=1)
     
     # 2. Definisikan email Google anggota kelompok yang diizinkan (Ganti dengan email asli)
-    allowed_emails = [
-        'peteryap0505@gmail.com',
-        'davin@example.com',
-        'farrellbagoes04@gmail.com',
-        'andrew.wanarahardja@gmail.com',
-        'rousan@example.com'
-    ]
+    # allowed_emails = [
+    #     'peteryap0505@gmail.com',
+    #     'davin@example.com',
+    #     'farrellbagoes04@gmail.com',
+    #     'andrew.wanarahardja@gmail.com',
+    #     'syahrousan@gmail.com.com'
+    # ]
     
     is_member = False
     
     if request.user.is_authenticated:
-        # Cek apakah email user yang sedang login ada di list anggota kelompok
-        if request.user.email in allowed_emails:
-            is_member = True
+        # Ngecek apakah role user di database adalah 'editor'
+        try:
+            if hasattr(request.user, 'oauth_profile'):
+                if request.user.oauth_profile.role == 'editor':
+                    is_member = True
+        except Exception as e:
+            pass 
             
-        # 3. Handle perubahan tema jika yang submit form adalah anggota kelompok
+        # Handle perubahan tema jika yang submit form adalah editor
         if request.method == 'POST' and is_member:
             bg_color = request.POST.get('background_color')
             font_family = request.POST.get('font_family')
@@ -91,7 +95,7 @@ def index(request):
                 config.font_family = font_family
                 
             config.save()
-            return redirect('home')
+            return redirect('home') 
     
     
     context = {

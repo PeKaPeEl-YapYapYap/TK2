@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import UserProfile, ConfigWeb
 
-# Register your models here.
+# Daftarin model biar muncul di halaman admin
+admin.site.register(UserProfile)
+admin.site.register(ConfigWeb)

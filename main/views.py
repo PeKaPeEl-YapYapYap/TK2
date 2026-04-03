@@ -54,7 +54,7 @@ def index(request):
         },
 		{
 			"nama": "Rousan Chandra Syahbunan", 
-			"umur": 69, 
+			"umur": 19, 
 			"npm": "2406435894",
 			"prodi": "Ilmu Komputer", 
 			"gambar": "/static/image/rousan.png"
